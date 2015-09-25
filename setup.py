@@ -25,7 +25,7 @@ setup(
     url='https://github.com/justinfay/mlog',
     author='Justin Fay',
     author_email='mail@justinfay.me',
-    license='propietary',
+    license='MIT',
     classifiers=[
         'Development Status :: 3 - Alpha',
         'Topic :: web blog',
