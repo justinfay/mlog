@@ -68,7 +68,6 @@ class Renderer:
         template = jinja_env.get_template('post_list.html')
         template_stream = template.stream(
             posts=posts,
-            tags=self._create_tag_menu(),
             categories=self._create_category_menu())
         output_file = self.output_dir.joinpath(*sections, INDEX)  # noqa
         if not output_file.parent.exists():
@@ -83,7 +82,6 @@ class Renderer:
         template = jinja_env.get_template('post.html')
         template_stream = template.stream(
             post=post,
-            tags=self._create_tag_menu(),
             categories=self._create_category_menu())
         output_file = self.output_dir.joinpath(POST, post['slug'])
         if not output_file.parent.exists():
@@ -124,17 +122,6 @@ class Renderer:
             self._create_post_list(
                 posts,
                 sections=[TAG, tag.replace(' ', '-')])
-
-    def _create_tag_menu(self):
-        """
-        Create the tag list.
-        """
-        # Sort tags by how frequently they are used.
-        tags = sorted(
-            self.blog.tags.items(),
-            key=lambda item: len(item[1]),
-            reverse=True)
-        return [tag[0] for tag in tags]
 
     def _create_category_menu(self):
         """
