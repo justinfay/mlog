@@ -37,8 +37,8 @@ class Blog:
     @property
     def categories(self):
         """
-        Retuns a dictionary type where the keys are tags
-        and the values are a list of posts tagged with key.
+        Retuns a dictionary type where the keys are categories
+        and the values are a list of posts within that category.
         """
         categories = collections.defaultdict(list)
         for post in self.posts:
