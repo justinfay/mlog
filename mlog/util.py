@@ -3,6 +3,7 @@ import pathlib
 import re
 import urllib.parse
 
+import dateutil.parser
 import jinja2
 import markdown
 
@@ -43,6 +44,42 @@ def make_url(base, *fragments):
     """
     path = urllib.parse.quote(str(pathlib.Path(*fragments)).replace(' ', '-'))
     return urllib.parse.urljoin(base, path)
+
+
+def get_section(section, default='', split=None):
+    """
+    Return a metadta section from a markdown document.
+    If the optional `split` argument is provided
+    return a list which is split.
+    """
+    section = ''.join(md.Meta.get(section, default))
+    if split is not None:
+        section = [
+            element.strip()
+            for element in section.split(split)
+            if element.strip()]
+    return section
+
+
+def read_post(path):
+    """
+    Read a blog post from a given file.
+    """
+    with path.open() as fh:
+        html = md.convert(fh.read())
+        post = {
+            'content': html,
+            'title': get_section('title'),
+            'description': get_section('description'),
+            'tags': get_section('tags', split=','),
+            'categories': get_section('categories', split=','),
+            'author': get_section('author'),
+            'date': dateutil.parser.parse(get_section('date')),
+            'slug': path.name.replace('.md', '.html'),
+        }
+    if not post['description']:
+        post['description'] = excerpt(post['content'])
+    return post
 
 
 if config.TEMPLATE_DIR is None:
