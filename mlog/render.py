@@ -143,8 +143,7 @@ class Renderer:
         # Sort categories alphabetically.
         categories = sorted(
             self.blog.categories.keys(),
-            key=lambda k: string.ascii_lowercase.find(k.lower()),
-            reverse=True)
+            key=lambda k: string.ascii_lowercase.find(k[0].lower()))
         return categories
 
     def _create_atom_feed(self):
