@@ -1,0 +1,9 @@
+{% extends "base.html" %}
+{% block content %}
+    {% for post in posts %}
+        <div>
+            <h2><a href="{{ make_site_url(POST, post.slug) }}">{{ post.title }}</a></h2>
+            {{ excerpt(post.content) }}
+        </div>
+    {% endfor %}
+{% endblock %}

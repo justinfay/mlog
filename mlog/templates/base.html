@@ -1,0 +1,49 @@
+<!doctype html>
+<html>
+
+    <head>
+        <meta charset="utf-8">
+
+        <title>{% block title %}{{ site_title }}{% endblock %} | {{ site_url }}</title>
+
+        <meta name="description" content="{% block description %}{{ site_description }}{% endblock %}">
+
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+
+        <link rel="stylesheet" type="text/css" href="{{ make_site_url(STATIC, STYLE, 'style.css') }}">
+
+    </head>
+
+    <body>
+
+        <div id="wrapper">
+
+            <header>
+                <h1><a href="{{ site_url}}">{{ site_title }}</a></h1>
+            </header>
+
+            <div id="content">
+
+                {% block content %}{% endblock %}
+
+            </div>
+
+            <div id="rightcol">
+
+                <div>
+                    {% include 'category_menu.html' %}
+                </div>
+
+                <div>
+                    {% include 'tag_menu.html' %}
+                </div>
+
+            </div>
+
+            <footer><hr>{{ site_url }}</footer>
+
+        </div>
+
+    </body>
+
+</html>

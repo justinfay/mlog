@@ -1,0 +1,3 @@
+recursive-include mlog/templates *
+recursive-include mlog/static *
+include requirements.txt
