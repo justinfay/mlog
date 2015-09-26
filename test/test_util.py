@@ -17,3 +17,12 @@ def test_generate_excerpt(strip_html):
     assert (
         util.generate_excerpt('a' * 2000, length=400) ==
         "<p>{0}...</p>".format('a' * 400))
+
+
+def test_make_url():
+    assert (
+        util.make_url('http://example.com', '1', '2', '3.html') ==
+        'http://example.com/1/2/3.html')
+    assert (
+        util.make_url('http://example.com') ==
+        'http://example.com/')

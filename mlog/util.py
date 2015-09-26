@@ -37,10 +37,7 @@ def generate_excerpt(html, length=config.EXCERPT_CHAR_COUNT):
 
 def make_url(base, *fragments):
     """
-    >>> make_url('http://example.com', '1', '2', '3.html')
-    'http://example.com/1/2/3.html'
-    >>> make_url('http://example.com')
-    'http://example.com/'
+    Construct a well formed url
     """
     path = urllib.parse.quote(str(pathlib.Path(*fragments)).replace(' ', '-'))
     return urllib.parse.urljoin(base, path)
