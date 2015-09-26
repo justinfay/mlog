@@ -8,7 +8,7 @@ Create you own config file to override these.
 import pathlib
 import pkg_resources
 
-from .constants import *
+from .constants import *  # noqa
 
 
 # Specifies to use the templates packaged with mlog.
@@ -29,6 +29,9 @@ IMAGE_DIR = STATIC_DIR.joinpath('img')
 
 # The amount of posts to display per page.
 POSTS_PER_PAGE = 5
+
+# The amount of character to use in the excerpt.
+EXCERPT_CHAR_COUNT = 200
 
 # Assume blog posts to be in the CWD.
 POSTS_DIR = pathlib.Path('posts')

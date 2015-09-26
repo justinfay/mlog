@@ -27,12 +27,12 @@ def strip_html(html):
     return match.sub('', html)
 
 
-def generate_excerpt(html, length=200):
+def generate_excerpt(html, length=config.EXCERPT_CHAR_COUNT):
     """
     Generate an excerpt from a given string of html.
     """
     return '<p>{0}...</p>'.format(
-        strip_html(html)[:200])
+        strip_html(html)[:length])
 
 
 def make_url(base, *fragments):
