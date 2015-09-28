@@ -1,0 +1,23 @@
+{% extends "base.html" %}
+
+{% block content %}
+    <div>
+
+        <h2>{{ page.title }}</h2>
+
+        <article>
+            {{ page.content }}
+        </article>
+
+        Posted by: {{ page.author }} on {{ page.date }} <br>
+
+    </div>
+{% endblock %}
+
+{% block title %}
+    {{ page.title }}
+{% endblock %}
+
+{% block description %}
+    {{ page.description }}
+{% endblock %}
