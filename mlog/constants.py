@@ -2,6 +2,9 @@
 Constants which are not configurable are stored in this file.
 """
 
+import string
+
+
 __all__ = (
     'APPLICATION_NAME',
     'TEMPLATE_DIR',
@@ -12,7 +15,8 @@ __all__ = (
     'SCRIPT',
     'IMAGE',
     'STYLE',
-    'INDEX')
+    'INDEX',
+    'SORT_ORDER')
 
 
 # Application constants.
@@ -31,3 +35,6 @@ IMAGE = 'img'
 STYLE = 'css'
 
 INDEX = 'index.html'
+
+# Sort order for pages and categories.
+SORT_ORDER = string.digits + string.ascii_lowercase

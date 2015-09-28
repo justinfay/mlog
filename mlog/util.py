@@ -71,6 +71,7 @@ def read_post(path):
             'description': get_section('description'),
             'tags': get_section('tags', split=','),
             'categories': get_section('categories', split=','),
+            'menu_name': get_section('menu_name'),
             'author': get_section('author'),
             'date': dateutil.parser.parse(get_section('date')),
             'slug': path.name.replace('.md', '.html'),

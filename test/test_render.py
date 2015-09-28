@@ -11,10 +11,12 @@ class TestRender(unittest.TestCase):
             'b': '',
             'x': '',
             'a': '',
+            '0': '',
+            '9': '',
         })
         self.renderer = mlog.render.Renderer(blog)
 
     def test_categories_sorting(self):
         self.assertEqual(
-            ['a', 'b', 'x'],
+            ['0', '9', 'a', 'b', 'x'],
             self.renderer._create_category_menu())

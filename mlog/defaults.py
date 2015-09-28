@@ -36,6 +36,9 @@ EXCERPT_CHAR_COUNT = 200
 # Assume blog posts to be in the CWD.
 POSTS_DIR = pathlib.Path('posts')
 
+# Assume pages to be in the CWD.
+PAGES_DIR = pathlib.Path('pages')
+
 # Output directory for compiled html files.
 OUTPUT_DIR = pathlib.Path('html')
 

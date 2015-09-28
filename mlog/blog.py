@@ -4,6 +4,7 @@ import pathlib
 
 from . import util
 from .config import blog_config as config
+from .constants import SORT_ORDER
 
 
 class Blog:
@@ -15,12 +16,15 @@ class Blog:
             self,
             title=config.TITLE,
             description=config.DESCRIPTION,
-            post_dir=config.POSTS_DIR):
+            post_dir=config.POSTS_DIR,
+            page_dir=config.PAGES_DIR):
 
         self.posts = []
+        self.pages = []
         self.title = title
         self.description = description
         self.post_dir = post_dir
+        self.page_dir = page_dir
 
     @property
     def tags(self):
@@ -57,3 +61,15 @@ class Blog:
             posts,
             key=operator.itemgetter('date'),
             reverse=True))  # Chronological order newest first.
+
+    def load_pages(self):
+        """
+        Load static pages from the file system.
+        """
+        pages = []
+        for path in pathlib.Path(self.page_dir).glob('*.md'):
+            pages.append(util.read_post(path))
+        self.pages = list(sorted(
+            pages,
+            key=lambda page: SORT_ORDER.find(
+                page['menu_name'][0].lower())))
