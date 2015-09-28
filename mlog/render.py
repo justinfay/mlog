@@ -4,7 +4,7 @@ import string
 
 from .config import blog_config as config
 from .constants import *  # noqa
-from .util import jinja_env
+from .util import jinja_env, Pager
 
 
 def create_output_structure(
@@ -66,14 +66,22 @@ class Renderer:
         Creates a stream of blog post snippets.
         """
         template = jinja_env.get_template('post_list.html')
-        template_stream = template.stream(
-            posts=posts,
-            categories=self._create_category_menu())
-        output_file = self.output_dir.joinpath(*sections, INDEX)  # noqa
-        if not output_file.parent.exists():
-            output_file.parent.mkdir(parents=True)
-        with output_file.open('w') as fh:
-            template_stream.dump(fh)
+        pager = Pager(posts, self.posts_per_page)
+        categories = self._create_category_menu()
+
+        for index in range(pager.page_count):
+            context = pager.page_context(index)
+            template_stream = template.stream(
+                context=context,
+                categories=categories,
+                sections=sections)
+
+            output_file = self.output_dir.joinpath(
+                *sections, context['file_name'])
+            output_file.parent.mkdir(parents=True, exist_ok=True)
+
+            with output_file.open('w') as fh:
+                template_stream.dump(fh)
 
     def _create_post_page(self, post):
         """

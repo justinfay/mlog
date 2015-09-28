@@ -1,9 +1,22 @@
 {% extends "base.html" %}
+
 {% block content %}
-    {% for post in posts %}
+    {% for post in context['items'] %}
         <div>
             <h2><a href="{{ make_site_url(POST, post.slug) }}">{{ post.title }}</a></h2>
             {{ excerpt(post.content) }}
         </div>
     {% endfor %}
+
+    {% if context.prev %}
+        <a href="{{ make_site_url(*sections, context.prev) }}">Newer</a>
+    {% endif %}
+
+    {% if context.prev and context.next %} | {% endif %}
+
+    {% if context.next %}
+        <a href="{{ make_site_url(*sections, context.next) }}">Older</a>
+
+    {% endif %}
+
 {% endblock %}

@@ -1,4 +1,5 @@
 import functools
+import math
 import pathlib
 import re
 import urllib.parse
@@ -77,6 +78,68 @@ def read_post(path):
     if not post['description']:
         post['description'] = excerpt(post['content'])
     return post
+
+
+def gen_page_names():
+    """
+    Generator function which yields consecutive page names.
+    """
+    yield INDEX
+    next_ = 2
+    while True:
+        yield "{0}.html".format(next_)
+        next_ += 1
+
+
+def page_names(count):
+    """
+    Return `count` amount of sequential page names.
+    """
+    gen = gen_page_names()
+    return [next(gen) for _ in range(count)]
+
+
+class Pager:
+    """
+    Helper class for creating next/prev links on list pages.
+
+    TODO: Rethink this class.
+    """
+
+    def __init__(self, items, per_page):
+        self._items = items
+        self._per_page = per_page
+        self._page_names = page_names(self.page_count)
+
+    def page_context(self, page_index):
+        """
+        Return a context dict for the given page index.
+        """
+        return {
+            'items': self._items_for_page(page_index),
+            'next': self._get_filename(page_index + 1),
+            'prev': self._get_filename(page_index - 1),
+            'file_name': self._get_filename(page_index),
+        }
+
+    def _items_for_page(self, page_index):
+        """
+        The items for page with given index.
+        """
+        start = page_index * self._per_page
+        return self._items[start:start + self._per_page]
+
+    @property
+    def page_count(self):
+        """
+        Return the total amount of pages.
+        """
+        return math.ceil(len(self._items) / self._per_page)
+
+    def _get_filename(self, page_index):
+        if 0 > page_index or page_index >= self.page_count:
+            return
+        return self._page_names[page_index]
 
 
 if config.TEMPLATE_DIR is None:
