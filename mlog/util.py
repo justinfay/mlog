@@ -153,6 +153,7 @@ jinja_env.globals['site_url'] = config.BASE_URL
 jinja_env.globals['site_description'] = config.DESCRIPTION
 jinja_env.globals['site_title'] = config.TITLE
 jinja_env.globals['POST'] = POST
+jinja_env.globals['PAGE'] = PAGE
 jinja_env.globals['CATEGORY'] = CATEGORY
 jinja_env.globals['TAG'] = TAG
 jinja_env.globals['STATIC'] = STATIC

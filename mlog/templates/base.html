@@ -22,6 +22,12 @@
                 <h1><a href="{{ site_url}}">{{ site_title }}</a></h1>
             </header>
 
+            <ul>
+                {% for page in page_menu() %}
+                    <li><a href="{{ make_site_url(PAGE, page[1]) }}">{{ page[0] }}</a></li>
+                {% endfor %}
+            </ul>
+
             <div id="content">
 
                 {% block content %}{% endblock %}

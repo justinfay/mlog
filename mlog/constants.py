@@ -8,6 +8,7 @@ import string
 __all__ = (
     'APPLICATION_NAME',
     'TEMPLATE_DIR',
+    'PAGE',
     'POST',
     'CATEGORY',
     'TAG',
@@ -24,6 +25,7 @@ APPLICATION_NAME = 'mlog'
 TEMPLATE_DIR = 'templates'
 
 # URL segments for specific sections.
+PAGE = 'page'
 POST = 'post'
 CATEGORY = 'category'
 TAG = 'tag'

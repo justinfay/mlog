@@ -46,11 +46,15 @@ class Renderer:
             self,
             blog,
             posts_per_page=config.POSTS_PER_PAGE,
-            output_dir=config.OUTPUT_DIR):
+            output_dir=config.OUTPUT_DIR,
+            template_env=jinja_env):
 
         self.blog = blog
         self.posts_per_page = posts_per_page
         self.output_dir = output_dir
+        self.template_env = jinja_env
+        self.template_env.globals['category_menu'] = self._create_category_menu
+        self.template_env.globals['page_menu'] = self._create_page_menu
 
     def render_to_files(self):
         """
@@ -58,6 +62,7 @@ class Renderer:
         """
         create_output_structure()
         self._create_post_pages()
+        self._create_page_pages()
         self._create_tag_pages()
         self._create_category_pages()
 
@@ -65,15 +70,13 @@ class Renderer:
         """
         Creates a stream of blog post snippets.
         """
-        template = jinja_env.get_template('post_list.html')
+        template = self.template_env.get_template('post_list.html')
         pager = Pager(posts, self.posts_per_page)
-        categories = self._create_category_menu()
 
         for index in range(pager.page_count):
             context = pager.page_context(index)
             template_stream = template.stream(
                 context=context,
-                categories=categories,
                 sections=sections)
 
             output_file = self.output_dir.joinpath(
@@ -87,15 +90,35 @@ class Renderer:
         """
         Write a rendered blog post template.
         """
-        template = jinja_env.get_template('post.html')
-        template_stream = template.stream(
-            post=post,
-            categories=self._create_category_menu())
+        template = self.template_env.get_template('post.html')
+        template_stream = template.stream(post=post)
         output_file = self.output_dir.joinpath(POST, post['slug'])
         if not output_file.parent.exists():
             output_file.parent.mkdir(parents=True)
         with output_file.open('w') as fh:
             template_stream.dump(fh)
+
+    def _create_page_page(self, page):
+        """
+        Write a rendered page.
+        """
+        template = self.template_env.get_template('page.html')
+        template_stream = template.stream(page=page)
+        output_file = self.output_dir.joinpath(PAGE, page['slug'])
+        if not output_file.parent.exists():
+            output_file.parent.mkdir(parents=True)
+        with output_file.open('w') as fh:
+            template_stream.dump(fh)
+
+    def _create_page_menu(self):
+        """
+        Return a list of two tuples containing the page_menu item
+        and slug for the page.
+        """
+        return list(sorted([
+            (page['menu_name'], page['slug'])
+            for page in self.blog.pages],
+            key=lambda page: SORT_ORDER.find(page[0][0].lower())))
 
     def _create_post_pages(self):
         """
@@ -104,6 +127,13 @@ class Renderer:
         self._create_post_list(self.blog.posts)
         for post in self.blog.posts:
             self._create_post_page(post)
+
+    def _create_page_pages(self):
+        """
+        Create the static pages.
+        """
+        for page in self.blog.pages:
+            self._create_page_page(page)
 
     def _create_category_pages(self):
         """

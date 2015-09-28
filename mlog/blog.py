@@ -4,7 +4,6 @@ import pathlib
 
 from . import util
 from .config import blog_config as config
-from .constants import SORT_ORDER
 
 
 class Blog:
@@ -69,7 +68,8 @@ class Blog:
         pages = []
         for path in pathlib.Path(self.page_dir).glob('*.md'):
             pages.append(util.read_post(path))
-        self.pages = list(sorted(
-            pages,
-            key=lambda page: SORT_ORDER.find(
-                page['menu_name'][0].lower())))
+        self.pages = pages
+
+    def load_blog(self):
+        self.load_posts()
+        self.load_pages()
