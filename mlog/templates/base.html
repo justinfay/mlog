@@ -19,14 +19,20 @@
         <div id="wrapper">
 
             <header>
-                <h1><a href="{{ site_url}}">{{ site_title }}</a></h1>
-            </header>
 
-            <ul>
-                {% for page in page_menu() %}
-                    <li><a href="{{ make_site_url(PAGE, page[1]) }}">{{ page[0] }}</a></li>
-                {% endfor %}
-            </ul>
+                <hgroup>
+                    <h1><a href="{{ site_url}}">{{ site_title }}</a></h1>
+                </hgroup>
+
+                <nav>
+                    <ul>
+                        {% for page in page_menu() %}
+                            <li><a href="{{ make_site_url(PAGE, page[1]) }}">{{ page[0] }}</a></li>
+                        {% endfor %}
+                    </ul>
+                </nav>
+
+            </header>
 
             <div id="content">
 
@@ -34,15 +40,21 @@
 
             </div>
 
-            <div id="rightcol">
+            <aside>
 
-                <div>
-                    {% include 'category_menu.html' %}
+                <div id="rightcol">
+
+                    <div>
+                        {% include 'category_menu.html' %}
+                    </div>
+
                 </div>
 
-            </div>
+            </aside>
 
-            <footer><hr>{{ site_url }}</footer>
+            <footer>
+                <hr>{{ site_url }}
+            </footer>
 
         </div>
 
