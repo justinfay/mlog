@@ -1,6 +1,5 @@
 import pathlib
 import shutil
-import string
 
 from .config import blog_config as config
 from .constants import *  # noqa
