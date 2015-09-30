@@ -142,9 +142,9 @@ class Pager:
         return self._page_names[page_index]
 
 
-if config.TEMPLATE_DIR is None:
-    template_loader = jinja2.PackageLoader(APPLICATION_NAME, TEMPLATE_DIR)
-else:
-    template_loader = jinja2.FileSystemLoader(config.TEMPLATE_DIR)
-
+template_loader = jinja2.PackageLoader(APPLICATION_NAME, TEMPLATE_DIR)
+if config.TEMPLATE_DIR is not None:
+    template_loader = jinja2.ChoiceLoader([
+        jinja2.FileSystemLoader(config.TEMPLATE_DIR),
+        template_loader])
 jinja_env = jinja2.Environment(loader=template_loader)
