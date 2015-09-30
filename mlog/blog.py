@@ -4,6 +4,7 @@ import pathlib
 
 from . import util
 from .config import blog_config as config
+from .constants import *  # noqa
 
 
 class Blog:
@@ -24,6 +25,17 @@ class Blog:
         self.description = description
         self.post_dir = post_dir
         self.page_dir = page_dir
+
+    @classmethod
+    def load(cls, *args, **kwargs):
+        """
+        Alternate init method which will also load
+        the blog content.
+        """
+        obj = cls(*args, **kwargs)
+        obj.load_posts()
+        obj.load_pages()
+        return obj
 
     @property
     def tags(self):
@@ -68,8 +80,6 @@ class Blog:
         pages = []
         for path in pathlib.Path(self.page_dir).glob('*.md'):
             pages.append(util.read_post(path))
-        self.pages = pages
-
-    def load_blog(self):
-        self.load_posts()
-        self.load_pages()
+        self.pages = list(sorted(
+            pages,
+            key=lambda k: SORT_ORDER.find(k['menu_name'][0].lower())))

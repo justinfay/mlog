@@ -76,3 +76,10 @@ class TestBlog(unittest.TestCase):
         self.assertEqual(
             [page_2, page_1],
             self.blog.pages)
+
+    @unittest.mock.patch('mlog.blog.Blog.load_posts')
+    @unittest.mock.patch('mlog.blog.Blog.load_pages')
+    def test_load(self, page, post):
+        _ = mlog.Blog.load()  # noqa
+        self.assertTrue(page.called)
+        self.assertTrue(post.called)
