@@ -1,4 +1,3 @@
-import functools
 import math
 import pathlib
 import re
@@ -149,15 +148,3 @@ else:
     template_loader = jinja2.FileSystemLoader(config.TEMPLATE_DIR)
 
 jinja_env = jinja2.Environment(loader=template_loader)
-jinja_env.globals['site_url'] = config.BASE_URL
-jinja_env.globals['site_description'] = config.DESCRIPTION
-jinja_env.globals['site_title'] = config.TITLE
-jinja_env.globals['POST'] = POST
-jinja_env.globals['PAGE'] = PAGE
-jinja_env.globals['CATEGORY'] = CATEGORY
-jinja_env.globals['TAG'] = TAG
-jinja_env.globals['STATIC'] = STATIC
-jinja_env.globals['STYLE'] = STYLE
-jinja_env.globals['excerpt'] = generate_excerpt
-jinja_env.globals['make_site_url'] = functools.partial(
-    make_url, config.BASE_URL)

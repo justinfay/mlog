@@ -1,9 +1,10 @@
+import functools
 import pathlib
 import shutil
 
 from .config import blog_config as config
 from .constants import *  # noqa
-from .util import jinja_env, Pager
+from . import util
 
 
 def create_output_structure(
@@ -46,14 +47,31 @@ class Renderer:
             blog,
             posts_per_page=config.POSTS_PER_PAGE,
             output_dir=config.OUTPUT_DIR,
-            template_env=jinja_env):
+            template_env=util.jinja_env):
 
         self.blog = blog
         self.posts_per_page = posts_per_page
         self.output_dir = output_dir
-        self.template_env = jinja_env
-        self.template_env.globals['category_menu'] = self._create_category_menu
-        self.template_env.globals['page_menu'] = self._create_page_menu
+        self.template_env = template_env
+        self.template_env.globals.update(self.template_env_globals)
+
+    @property
+    def template_env_globals(self):
+        return {
+            'category_menu': self._create_category_menu,
+            'page_menu': self._create_page_menu,
+            'site_url': config.BASE_URL,
+            'site_description': self.blog.description,
+            'site_title': self.blog.title,
+            'POST': POST,
+            'PAGE': PAGE,
+            'CATEGORY': CATEGORY,
+            'TAG': TAG,
+            'STATIC': STATIC,
+            'STYLE': STYLE,
+            'excerpt': util.generate_excerpt,
+            'make_site_url': functools.partial(util.make_url, config.BASE_URL),
+        }
 
     def render_to_files(self):
         """
@@ -70,7 +88,7 @@ class Renderer:
         Creates a stream of blog post snippets.
         """
         template = self.template_env.get_template('post_list.html')
-        pager = Pager(posts, self.posts_per_page)
+        pager = util.Pager(posts, self.posts_per_page)
 
         for index in range(pager.page_count):
             context = pager.page_context(index)
