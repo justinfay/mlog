@@ -1,39 +1,145 @@
 @charset "UTF-8";
 
-body {
-    background: #EBFFEB;
-    font-family: "Arial", Arial, sans-serif;
+/*
+#EBFFEB  green
+#17BEBB  blue
+#BEB7A4  grey
+#2E282A  black
+#CD5334  red
+
+*/
+
+article, aside, footer, header, hgroup, menu, nav, sections {
+    display: block;
 }
 
-h1, h2, h3, a {
-    color: #000A00;
+body {
+    background: #EBFFEB;
+    font: .81em/150% Arial, Helvetica, sans-serif;
+    color: #2E282A;
+}
+
+a {
+    text-decoration: none;
+    color: #CD5334;
+}
+
+
+a:hover {
+    text-decoration: underline;
+}
+
+ul, ol {
+    margin: 1em 0 1.4em 24px;
+    padding: 0;
+    line-height: 140%;
+}
+
+li {
+    margin: 0 0 .5em 0;
+    padding 0;
 }
 
 #wrapper {
     width: 960px;
-    background: #FFF;
-    margin-left: auto;
-    margin-right: auto;
-    padding: 20px
+    margin: 0 auto;
 }
 
 #content {
     float: left;
-    width: 640px;
+    width: 600px;
 }
 
-#rightcol {
-    float: left;
+#sidebar {
+    float: right;
     width: 280px;
-    margin-left: 20px;
 }
 
-footer, header {
+header {
+    height: 100px;
+    position: relative;
+}
+
+#site-logo {
+    position: absolute;
+    top: 10px;
+}
+
+#main-nav {
+    width: 100%;
+    background: #17BEBB;
+    margin: 0;
+    padding: 0;
+}
+
+#main-nav li {
+    margin: 0;
+    padding: 0;
+    list-style: none;
+    float: left;
+    position: relative;
+}
+
+#main-nav a {
+    line-height: 100%;
+    font-weight: bold;
+    color: #BEB7A4;
     display: block;
-    clear: both;
+    padding: 14px 15px;
+    text-decoration: none;
+}
+
+#main-nav a:hover {
+    color: #000;
+    background: #EBFFEB;
 }
 
 footer {
-    padding-top: 20px;
+    clear: both;
     text-align: center;
+    font-size: 85%;
+}
+
+.widget {
+    margin: 0 0 30px;
+    padding: 10px 20px;
+}
+
+.widgettitle {
+    margin: 0 0 5px;
+    padding: 0;
+}
+.widget ul {
+    margin: 0;
+    padding: 0;
+}
+.widget li {
+    margin: 0;
+    padding: 6px 0;
+    list-style: none;
+    clear: both;
+    border-top: solid 1px #BEB7A4;
+
+h1, h2, h3, h4, h5, h6 {
+    line-height: 1.4em;
+    margin: 20px 0 .4em;
+    color: #CD5334;
+}
+h1 {
+    font-size: 2em;
+}
+h2 {
+    font-size: 1.6em;
+}
+h3 {
+    font-size: 1.4em;
+}
+h4 {
+    font-size: 1.2em;
+}
+h5 {
+    font-size: 1.1em;
+}
+h6 {
+    font-size: 1em;
 }

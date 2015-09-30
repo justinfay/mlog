@@ -1,0 +1,63 @@
+@media screen and (max-width: 980px) {
+
+    #wrapper {
+        width: 95%;
+    }
+
+    #content {
+        width: 60%;
+        padding: 3% 4%;
+    }
+
+    #sidebar {
+        width: 30%;
+    }
+
+    #sidebar .widget {
+        padding: 8% 7%;
+        margin-bottom: 10px;
+    }
+
+}
+
+@media screen and (max-width: 650px) {
+
+    #header {
+        height: auto;
+    }
+
+    #main-nav {
+        position: static;
+    }
+
+    #site-description {
+        margin: 0 0 15px;
+        position: static;
+    }
+
+    #content {
+        width: auto;
+        float: none;
+        margin: 20px 0;
+    }
+
+    #sidebar {
+        width: 100%;
+        float: none;
+        margin: 0;
+    }
+
+}
+
+@media screen and (max-width: 480px) {
+
+    html {
+        -webkit-text-size-adjust: none;
+    }
+
+    #main-nav a {
+        font-size: 90%;
+        padding: 10px 8px;
+    }
+
+}
