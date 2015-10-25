@@ -1,6 +1,6 @@
 *.pyc
 *.swp
 html/*
-env/*
+env*/*
 .cache/*
 *.egg-info
