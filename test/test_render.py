@@ -1,5 +1,5 @@
 import unittest
-import unittest.mock
+import mock
 
 import mlog
 
@@ -7,7 +7,7 @@ import mlog
 class TestRender(unittest.TestCase):
 
     def setUp(self):
-        blog = unittest.mock.Mock(categories={
+        blog = mock.Mock(categories={
             'b': '',
             'x': '',
             'a': '',
@@ -20,3 +20,20 @@ class TestRender(unittest.TestCase):
         self.assertEqual(
             ['0', '9', 'a', 'b', 'x'],
             self.renderer._create_category_menu())
+
+
+class Test_Render(unittest.TestCase):
+
+    def setUp(self):
+        mlog.render._Renderer._templates = {}
+        self.renderer = mlog.render._Renderer()
+
+    def test_default_template(self):
+        renderer = mlog.render._Renderer(default_template='foo')
+        self.assertEqual(
+            'foo',
+            renderer._find_template(mock.Mock()))
+
+    def test_no_default_template(self):
+        with self.assertRaises(KeyError):
+            self.renderer._find_template(mock.Mock())

@@ -37,6 +37,27 @@ def create_output_structure(
     shutil.copytree(str(img), str(output_img))
 
 
+class _Renderer:
+    """
+    Generic renderer class. Maintains a class mapping
+    of types to templates.
+    """
+    _templates = {}
+
+    def __init__(self, default_template=None):
+        if default_template is not None:
+            self._templates[None] = default_template
+
+    def _find_template(self, content):
+        template = next((
+            key
+            for key in self._templates
+            if isinstance(content, type(key))
+            and isinstance(key, type(content))),
+            None)
+        return self._templates[template]
+
+
 class Renderer:
     """
     Creates the actual template files on disk.
