@@ -4,3 +4,4 @@ html/*
 env*/*
 .cache/*
 *.egg-info
+.coverage
