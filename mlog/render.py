@@ -5,6 +5,7 @@ import shutil
 
 from .config import blog_config as config
 from .constants import *  # noqa
+from . import jinja
 from . import util
 
 
@@ -99,7 +100,7 @@ class Renderer:
             blog,
             posts_per_page=config.POSTS_PER_PAGE,
             output_dir=config.OUTPUT_DIR,
-            template_env=util.jinja_env):
+            template_env=jinja.env):
 
         self.blog = blog
         self.posts_per_page = posts_per_page

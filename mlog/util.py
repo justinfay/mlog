@@ -4,7 +4,6 @@ import re
 import urllib.parse
 
 import dateutil.parser
-import jinja2
 import markdown
 
 from .config import blog_config as config
@@ -140,11 +139,3 @@ class Pager:
         if 0 > page_index or page_index >= self.page_count:
             return
         return self._page_names[page_index]
-
-
-template_loader = jinja2.PackageLoader(APPLICATION_NAME, TEMPLATE_DIR)
-if config.TEMPLATE_DIR is not None:
-    template_loader = jinja2.ChoiceLoader([
-        jinja2.FileSystemLoader(config.TEMPLATE_DIR),
-        template_loader])
-jinja_env = jinja2.Environment(loader=template_loader)
