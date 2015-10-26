@@ -80,16 +80,6 @@ class _Renderer:
         return file_.open('w')
 
 
-def jinja_template_writer(template, content, fh):
-    """
-    Render the given jinja template and write the
-    output to fh.
-    """
-    template = jinja.env.get_template(template)
-    template_stream = template.stream(content=content)
-    template_stream.dump(fh)
-
-
 class Renderer:
     """
     Creates the actual template files on disk.
