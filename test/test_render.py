@@ -26,14 +26,24 @@ class Test_Render(unittest.TestCase):
 
     def setUp(self):
         mlog.render._Renderer._templates = {}
-        self.renderer = mlog.render._Renderer()
-
-    def test_default_template(self):
-        renderer = mlog.render._Renderer(default_template='foo')
-        self.assertEqual(
-            'foo',
-            renderer._find_template(mock.Mock()))
+        self.template_writer = mock.Mock()
+        self.renderer = mlog.render._Renderer(self.template_writer)
 
     def test_no_default_template(self):
         with self.assertRaises(KeyError):
             self.renderer._find_template(mock.Mock())
+
+    def test_find_template(self):
+        content = mock.Mock()
+        self.renderer.register_template(type(content), 'template')
+        self.assertEqual(
+            'template',
+            self.renderer._find_template(content))
+
+    def test_render(self):
+        self.renderer._get_fh = mock.Mock()
+        content = mock.Mock()
+        self.renderer.register_template(type(content), 'template')
+        self.renderer.render('/foo/bar', content)
+        self.renderer._get_fh.assert_called_with('/foo/bar')
+        self.template_writer.called  # TODO: check args.

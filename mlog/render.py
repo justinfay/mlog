@@ -1,3 +1,4 @@
+from contextlib import closing
 import functools
 import pathlib
 import shutil
@@ -44,18 +45,48 @@ class _Renderer:
     """
     _templates = {}
 
-    def __init__(self, default_template=None):
-        if default_template is not None:
-            self._templates[None] = default_template
+    def __init__(self, template_writer):
+        self._template_writer = template_writer
+
+    def register_template(self, type_, template):
+        """
+        Register a template for an object type.
+        """
+        self._templates[type_] = template
 
     def _find_template(self, content):
-        template = next((
-            key
-            for key in self._templates
-            if isinstance(content, type(key))
-            and isinstance(key, type(content))),
-            None)
-        return self._templates[template]
+        """
+        Find the template for the given content.
+        """
+        return self._templates[type(content)]
+
+    def render(self, path, content):
+        """
+        Render the given context at path.
+        """
+        template = self._find_template(content)
+
+        with closing(self._get_fh(path)) as fh:
+            self._template_writer(template, content, fh)
+
+    def _get_fh(self, path):
+        """
+        Return a file handle for the given path, ensuring
+        its directories are created.
+        """
+        file_ = Path(path)
+        file_.parent.mkdir(parents=True, exist_ok=True)
+        return file_.open('w')
+
+
+def jinja_template_writer(template, content, fh):
+    """
+    Render the given jinja template and write the
+    output to fh.
+    """
+    template = jinja.env.get_template(template)
+    template_stream = template.stream(content=content)
+    template_stream.dump(fh)
 
 
 class Renderer:
