@@ -5,6 +5,57 @@ import pathlib
 from . import util
 from .config import blog_config as config
 from .constants import *  # noqa
+from .site import PathTree
+
+
+def build_menu(items):
+    """
+    Return a list of two tuples representing a menu.
+    The returned list can contain nested lists of the same
+    structure representing sub menus.
+
+    Items should be a list of two tuples containing label
+    and slug. This label contain a `/` character to specify
+    sub menus.
+
+    The items sorted by the label, 0-z case insensitive.
+
+    To provide a custom menu order prefix each part of the
+    label can be prefixed with a hidden character and then
+    the characters '__' (double underscore). When displaing
+    the label with be stripped up to the first char after '__'.
+    """
+    menu_tree = PathTree()
+    for label, slug in items:
+        menu_tree.post(label, slug)
+    menu_items = flatten(menu_tree.parent_items())
+    sorted_menu = menu_sort(menu_items)
+    return sorted_menu
+
+
+def menu_sort(menu_items):
+    sub_sorted = []
+    for elem in menu_items:
+        if isinstance(elem[1], list):
+            sub_sorted.append((elem[0], menu_sort(elem[1])))
+        else:
+            sub_sorted.append(elem)
+    menu_sorted = sorted(
+        sub_sorted,
+        key=lambda x: SORT_ORDER.find(x[0][0]))
+    return [
+        (next(reversed(elem[0].split('__', 1))), elem[1])
+        for elem in menu_sorted]
+
+
+def flatten(items):
+    menu = []
+    for item in items:
+        if isinstance(item[1], PathTree):
+            menu.append((item[0], flatten(item[1].parent_items())))
+        else:
+            menu.append(item)
+    return menu
 
 
 class Blog:

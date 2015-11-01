@@ -63,4 +63,4 @@ class TreeTest(unittest.TestCase):
         self.tree.add(['foo', 'bill'], 'foobill')
         self.assertEqual(
             sorted([['foo', 'bar'], ['foo', 'bill']]),
-            sorted(list(self.tree.all_paths())))
+            sorted(list(self.tree.paths())))

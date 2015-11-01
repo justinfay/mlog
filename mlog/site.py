@@ -41,13 +41,16 @@ class _Tree:
     def __delitem__(self, item):
         del self._tree[item]
 
-    def all_paths(self):
+    def parent_items(self):
+        return self._tree.items()
+
+    def paths(self):
         """
         Return all paths from the root to items.
         """
         for key in self._tree:
             if isinstance(self._tree[key], _Tree):
-                for fragment in self._tree[key].all_paths():
+                for fragment in self._tree[key].paths():
                     yield [key, *fragment]
             else:
                 yield [key]
@@ -76,7 +79,7 @@ class PathTree(_Tree):
         """
         return (
             self._join_path(path)
-            for path in self.all_paths())
+            for path in self.paths())
 
     def _join_path(self, path):
         return '/'.join(path)
