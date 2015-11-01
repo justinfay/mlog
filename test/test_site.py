@@ -4,9 +4,9 @@ import unittest
 from mlog import site
 
 
-class TestSite(unittest.TestCase):
+class TestPathTree(unittest.TestCase):
     def setUp(self):
-        self.site = site.Site()
+        self.site = site.PathTree()
 
     def test_nonexistant(self):
         self.assertRaises(KeyError, self.site.get)
@@ -29,11 +29,11 @@ class TestSite(unittest.TestCase):
         self.site.post('a/b/c/slug', content)
         self.assertEqual(content, self.site.get('a/b/c/slug'))
         first = self.site.get('a')
-        self.assertTrue(isinstance(first, site.Site))
+        self.assertTrue(isinstance(first, site.PathTree))
         second = self.site.get('a/b')
-        self.assertTrue(isinstance(second, site.Site))
+        self.assertTrue(isinstance(second, site.PathTree))
         third = self.site.get('a/b/c')
-        self.assertTrue(isinstance(third, site.Site))
+        self.assertTrue(isinstance(third, site.PathTree))
         self.assertTrue(
             first.get('b/c/slug') is
             second.get('c/slug') is

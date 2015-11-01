@@ -53,7 +53,7 @@ class _Tree:
                 yield [key]
 
 
-class Site(_Tree):
+class PathTree(_Tree):
     """
     A tree that uses file type paths for paths.
     """
