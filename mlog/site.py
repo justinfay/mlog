@@ -1,67 +1,91 @@
-class Site:
+class _Tree:
     """
-    A website.
+    A tree data srtucture.
     """
 
     def __init__(self):
-        self._site = {}
+        self._tree = {}
+
+    def get(self, path=()):
+        """
+        Return an element in the tree at the given path.
+        path is given as a list of nodes starting from the
+        root.
+        """
+
+        response = self
+        for segment in path:
+            response = response._tree[segment]
+        return response
+
+    def add(self, path, item):
+        """
+        Add the given item to the tree at path.
+        """
+        head, *tail = path
+        if not tail:
+            self._tree[head] = item
+        else:
+            sub_tree = self._tree.setdefault(head, self.__class__())
+            sub_tree.add(tail, item)
+
+    def __getattr__(self, attr):
+        try:
+            return self._tree[attr]
+        except KeyError:
+            raise AttributeError
+
+    def __getitem__(self, item):
+        return self._tree[item]
+
+    def __delitem__(self, item):
+        del self._tree[item]
+
+    def all_paths(self):
+        """
+        Return all paths from the root to items.
+        """
+        for key in self._tree:
+            if isinstance(self._tree[key], _Tree):
+                for fragment in self._tree[key].all_paths():
+                    yield [key, *fragment]
+            else:
+                yield [key]
+
+
+class Site(_Tree):
+    """
+    A tree that uses file type paths for paths.
+    """
 
     def get(self, uri=''):
         """
         Get the content at `uri`.
         """
-        response = self._site
-        for part in self._parts(uri):
-            response = response[part]
-        return response
+        return super().get(self._split_path(uri))
 
-    def post(self, content, uri):
+    def post(self, uri, content):
         """
         Put the content at the given URI
         """
-        head, tail = self._split(uri)
-        if tail is None:
-            self._site[head] = content
-        else:
-            site = self._site.setdefault(head, Site())
-            site.post(content, tail)
+        self.add(self._split_path(uri), content)
 
     def spider(self):
         """
         Generator for all urls belonging to this site.
         """
-        for key in self._site:
-            if isinstance(self._site[key], Site):
-                for fragment in self._site[key].spider():
-                    yield self._join(key, fragment)
-            else:
-                yield key
+        return (
+            self._join_path(path)
+            for path in self.all_paths())
+
+    def _join_path(self, path):
+        return '/'.join(path)
+
+    def _split_path(self, path):
+        return [
+            fragment
+            for fragment in path.split('/')
+            if fragment] or ['']
 
     def __str__(self):
         return 'Website:\n    ' + '\n    '.join(self.spider())
-
-    def _split(self, uri):
-        """
-        Return the parent path and the tail.
-        """
-        if '/' in uri:
-            return uri.split('/', 1)
-        return [uri, None]
-
-    def __getattr__(self, attr):
-        return self._site[attr]
-
-    def __getitem__(self, item):
-        return self._site[item]
-
-    def _parts(self, uri):
-        return [
-            part
-            for part in uri.split('/')
-            if part] or ['']
-
-    def _join(self, *parts):
-        return '/'.join(
-            part
-            for part in parts
-            if part)

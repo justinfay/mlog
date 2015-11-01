@@ -13,20 +13,20 @@ class TestSite(unittest.TestCase):
 
     def test_top_level_get(self):
         content = mock.Mock()
-        self.site.post(content, 'slug')
+        self.site.post('slug', content)
         self.assertEqual(content, self.site.get('slug'))
 
     def test_multiple_top_level(self):
         content = mock.Mock()
         content2 = mock.Mock()
-        self.site.post(content, uri='slug')
-        self.site.post(content2, uri='slug2')
-        self.assertEqual(content, self.site.get('slug'))
-        self.assertEqual(content2, self.site.get('slug2'))
+        self.site.post('slug', content)
+        self.site.post('slug2', content2)
+        self.assertEqual(self.site.get('slug'), content)
+        self.assertEqual(self.site.get('slug2'), content2)
 
     def test_nested_level(self):
         content = mock.Mock()
-        self.site.post(content, 'a/b/c/slug')
+        self.site.post('a/b/c/slug', content)
         self.assertEqual(content, self.site.get('a/b/c/slug'))
         first = self.site.get('a')
         self.assertTrue(isinstance(first, site.Site))
@@ -50,25 +50,21 @@ class TestSite(unittest.TestCase):
             third.get('slug'))
 
     def test_spider(self):
-        self.site.post(mock.Mock(), uri='slug')
+        self.site.post('slug', '')
         self.assertEqual(
             sorted(['slug']),
             sorted(list(self.site.spider())))
-        self.site.post(mock.Mock(), 'foo/slug')
+        self.site.post('foo/slug', '')
         self.assertEqual(
             sorted(['slug', 'foo/slug']),
             sorted(list(self.site.spider())))
-        self.site.post(mock.Mock(), 'foo/slug2')
+        self.site.post('foo/slug2', '')
         self.assertEqual(
             sorted(['slug', 'foo/slug', 'foo/slug2']),
             sorted(list(self.site.spider())))
 
-    def test_parts(self):
-        self.assertEqual(['a', 'b', 'c'], self.site._parts('a/b/c'))
-        self.assertEqual([''], self.site._parts(''))
-        self.assertEqual(['a'], self.site._parts('/a/'))
-        self.assertEqual(['a'], self.site._parts('////a/'))
-        self.assertEqual(['a', 'b'], self.site._parts('a///b//'))
-
-    def test_join(self):
-        self.assertEqual('a/b/c', self.site._join('a', 'b', 'c'))
+    def test_split_path(self):
+        self.assertEqual(['a', 'b', 'c'], self.site._split_path('a/b/c'))
+        self.assertEqual(['a'], self.site._split_path('/a/'))
+        self.assertEqual(['a'], self.site._split_path('////a/'))
+        self.assertEqual(['a', 'b'], self.site._split_path('a///b//'))
