@@ -49,11 +49,12 @@ class _Renderer:
     def __init__(self, template_writer):
         self._template_writer = template_writer
 
-    def register_template(self, type_, template):
+    @classmethod
+    def register_template(cls, type_, template):
         """
         Register a template for an object type.
         """
-        self._templates[type_] = template
+        cls._templates[type_] = template
 
     def _find_template(self, content):
         """
@@ -78,6 +79,20 @@ class _Renderer:
         file_ = Path(path)
         file_.parent.mkdir(parents=True, exist_ok=True)
         return file_.open('w')
+
+
+def register_template(template):
+    """
+    Class decorator for registering a template.
+    """
+    def dec(cls):
+        _Renderer._templates[cls] = template
+
+        @functools.wraps(cls)
+        def _dec(*args, **kwargs):
+            return cls(*args, **kwargs)
+        return _dec
+    return dec
 
 
 class Renderer:

@@ -47,3 +47,12 @@ class Test_Render(unittest.TestCase):
         self.renderer.render('/foo/bar', content)
         self.renderer._get_fh.assert_called_with('/foo/bar')
         self.template_writer.called  # TODO: check args.
+
+    def test_decorator(self):
+        class Foo:
+            pass
+        mlog.render.register_template('foo.html')(Foo)
+        self.assertEqual(
+            'foo.html',
+            self.renderer._find_template(Foo()))
+
