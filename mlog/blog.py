@@ -1,11 +1,47 @@
 import collections
 import operator
 import pathlib
+import string
 
 from . import util
 from .config import blog_config as config
 from .constants import *  # noqa
 from .site import PathTree
+
+
+#@register_template('page.html')
+class Page:
+    """
+    A static web pages content.
+    """
+
+    def __init__(self, slug, title, content, menu=None):
+        self.slug = slug
+        self.title = title
+        self.content = content
+        self.menu = menu
+
+
+class _Site:
+    def __init__(self, title, description, pages):
+        self.title = title
+        self.description = description
+        self._pages = pages
+
+    def _with_parent(self, obj):
+        setattr(obj, 'parent', self)
+        return obj
+
+    @property
+    def pages(self):
+        for page in self.pages:
+            yield self._with_parent(page)
+
+    @property
+    def menu(self):
+        """
+        Return the site menu for the blog.
+        """
 
 
 def build_menu(items):
@@ -42,7 +78,7 @@ def menu_sort(menu_items):
             sub_sorted.append(elem)
     menu_sorted = sorted(
         sub_sorted,
-        key=lambda x: SORT_ORDER.find(x[0][0]))
+        key=lambda x: SORT_ORDER.find(x[0][0].lower()))
     return [
         (next(reversed(elem[0].split('__', 1))), elem[1])
         for elem in menu_sorted]
